@@ -1,0 +1,24 @@
+{
+  "name": "auth_react_express_postgres",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "server": "node server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VareraJan/auth_react_express_postgres.git"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "postgresql"
+  ],
+  "author": "Valerii Zhuravlev <vareraj@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VareraJan/auth_react_express_postgres/issues"
+  },
+  "homepage": "https://github.com/VareraJan/auth_react_express_postgres#readme"
+}
