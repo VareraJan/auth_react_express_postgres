@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "server": "node server/app.js"
+    "server": "node server/app.js",
+    "client": "node client/index.js"
   },
   "repository": {
     "type": "git",
