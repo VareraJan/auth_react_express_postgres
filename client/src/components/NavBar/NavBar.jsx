@@ -16,11 +16,11 @@ function NavBar() {
 
   return (
     <nav>
-    <div class="nav-wrapper blue darken-1" style={{ padding: '0 2rem' }}>
-      <span class="brand-logo">Название проекта или лого</span>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <div className="nav-wrapper blue darken-1" style={{ padding: '0 2rem' }}>
+      <span className="brand-logo">LOGO</span>
+      <ul id="nav-mobile" className="right hide-on-med-and-down">
         <li><Link to="/create">Создать</Link></li>
-        <li><Link to="/links">Ссылки</Link></li>
+        <li><Link to="/profile">Профиль</Link></li>
         <li><a href="/" onClick={logoutHandler}>Выйти</a></li>
       </ul>
     </div>
