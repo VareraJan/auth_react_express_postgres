@@ -7,6 +7,7 @@ const router = Router()
 const uuid = require('uuid')
 const mailService = require('../service/mail-service')
 const tokenService = require('../service/token-service')
+const userService = require('../service/user-service')
 require('dotenv').config()
 
 // /api/auth/register
@@ -27,25 +28,19 @@ router.post(
         })
       }
       const {email, password} = req.body
-      console.log('==============', req.body);
       const candidate = await User.findOne({where: { email }})
       if(candidate) {
         return res.status(400).json({ message: 'Такой пользователь уже существует!' })
       }
-      console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
       const hashedPassword = await bcrypt.hashSync(password, 7)
-      console.log('hhhhhhhhhhhhhhhhhhhh');
       const activationLink = uuid.v4()
-      console.log('------------UUID----------', activationLink);
       const user = await User.create({ email, password: hashedPassword, activationLink })
-      console.log('USER CREQTE++++++++++++++++++++++++++ TO MAIL');
-      await mailService.sendActivationMail(email, `${process.env.API_URL}/api/auth/activation/${activationLink}`)
+      await mailService.sendActivationMail(email, `${process.env.API_URL}/api/auth/activate/${activationLink}`)
       const tokens = tokenService.generateTokens({
         email: user.email,
         id: user.id,
         isActivation: user.isActivation
       })
-      console.log('CANCEL MAIL ------');
       await tokenService.saveToken( user.id, tokens.refreshToken)
 
       res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
@@ -118,11 +113,12 @@ router.post('/logout', async (req, res) => {
   }
 })
 
-// /api/auth/activation/kalsdi
-router.get('/activate/:id', async (req,res) => {
+// /api/auth/activate/kalsdi
+router.get('/activate/:link', async (req,res) => {
   try {
-    
-
+    const activationLink = req.params.link
+    await userService.activate(activationLink)
+    return res.redirect(process.env.CLIENT_URL)
 
   } catch (error) {
     res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })

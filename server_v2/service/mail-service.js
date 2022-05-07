@@ -13,11 +13,9 @@ class MailService {
         pass: process.env.SMTP_PASSWORD
       }
     })
-    console.log('СОЗДАЛ КНСТРУКТОР');
   }
 
   async sendActivationMail(to, link) {
-    console.log('ПРИНЯЛ для запуска ', to, process.env.SMTP_USER, this.transporter);
 
     await this.transporter.sendMail({
       from: process.env.SMTP_USER,
@@ -32,7 +30,6 @@ class MailService {
             </div>
           `
     })
-    console.log('MAIL CANCELL ==========');
   }
 }
 
