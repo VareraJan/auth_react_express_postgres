@@ -1,7 +1,8 @@
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
+const tokenService = require('../service/token-service')
 require('dotenv').config()
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   if (req.method === 'OPTIONS') {
     return next()
   }
@@ -13,7 +14,8 @@ module.exports = (req, res, next) => {
       return res.status(401).json({ message: 'Нет авторизации' })
     }
     
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    // const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+    const decoded = await tokenService.validateAccessToken(token)
     req.user = decoded
     next()
     

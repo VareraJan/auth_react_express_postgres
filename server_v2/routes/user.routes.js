@@ -6,7 +6,7 @@ const router = Router()
 router.get('/', auth, async (req, res) => {
   try {
 
-    const id  = req.user.userId
+    const id  = req.user.id
     const response = await User.findOne({where: {id}, raw: true})
     res.json(response)
     
