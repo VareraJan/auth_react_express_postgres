@@ -86,14 +86,30 @@ router.post(
       if(!isMatch) {
         return res.status(400).json({ message: 'Неверный пароль, попробуйте снова' })
       }
+      const tokens = tokenService.generateTokens({
+        email: user.email,
+        id: user.id,
+        isActivation: user.isActivation
+      })
+      await tokenService.saveToken( user.id, tokens.refreshToken)
 
-      const token = jwt.sign(
-        { userId: user.id },
-        process.env.JWT_SECRET,
-        { expiresIn: '1h' }
-      )
 
-      res.json({ token, userId: user.id })
+      // const token = jwt.sign(
+      //   { userId: user.id },
+      //   process.env.JWT_SECRET,
+      //   { expiresIn: '1h' }
+      // )
+
+      // res.json({ token, userId: user.id })
+      res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
+      res.status(201).json({
+        ...tokens, 
+        user: {
+          email: user.email,
+          id: user.id,
+          isActivation: user.isActivation
+        }
+      })
 
 
     } catch (error) {
@@ -105,8 +121,11 @@ router.post(
 
 router.post('/logout', async (req, res) => {
   try {
-    
 
+    const {refreshToken} = req.cookies
+    const token = await userService.logout(refreshToken) 
+    res.clearCookie('refreshToken')
+    return res.json(token)
 
   } catch (error) {
     res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
@@ -128,8 +147,19 @@ router.get('/activate/:link', async (req,res) => {
 // /api/auth/refresh
 router.get('/refresh', async (req,res) => {
   try {
-    
+    const {refreshToken} = req.cookies
 
+    if(!refreshToken) {
+      return res.status(401).json({ message: 'Нет авторизации' })
+    }
+    const userData = await userService.refresh( refreshToken )
+
+    if (userData === 'authError') {
+      return res.status(401).json({ message: 'Нет авторизации' })
+    }
+
+    res.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
+    res.status(201).json(userData)
 
   } catch (error) {
     res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
