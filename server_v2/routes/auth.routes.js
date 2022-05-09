@@ -101,7 +101,9 @@ router.post(
       // )
 
       // res.json({ token, userId: user.id })
+
       res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly: true})
+      
       res.status(201).json({
         ...tokens, 
         user: {
@@ -121,8 +123,8 @@ router.post(
 
 router.post('/logout', async (req, res) => {
   try {
-
     const {refreshToken} = req.cookies
+
     const token = await userService.logout(refreshToken) 
     res.clearCookie('refreshToken')
     return res.json(token)

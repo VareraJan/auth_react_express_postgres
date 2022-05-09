@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom';
 import { useRoutes } from './routes';
 import { useAuth } from './hooks/auth.hook';
@@ -8,13 +8,20 @@ import Loader from './components/Loader';
 import 'materialize-css'
 
 function App() {
-  const {login, logout, token, userId, ready} = useAuth()
+  const {login, logout, checkAuth, token, userId, ready} = useAuth()
   const isAuthenticated = !!token
   const routes = useRoutes(isAuthenticated)
+
+  useEffect(() => {
+    if (localStorage.getItem(process.env.REACT_APP_STORAGE_NAME)) {
+      checkAuth()
+    }
+  }, [])
 
   if(!ready) {
     return <Loader />
   }
+
 
   return (
     <AuthContext.Provider value={{

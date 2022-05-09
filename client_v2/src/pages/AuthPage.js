@@ -20,7 +20,7 @@ function AuthPage() {
   useEffect(() => {
     window.M.updateTextFields()
   }, [])
-
+ 
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value  })
   }
@@ -34,8 +34,10 @@ function AuthPage() {
 
   const loginHandler = async () => {
     try {
+
       const data = await request(`${process.env.REACT_APP_HOST}/api/auth/login`, 'POST', {...form})
-      auth.login(data.token, data.userId)
+      
+      auth.login(data.accessToken, data.user)
     } catch (error) { }
   }
 

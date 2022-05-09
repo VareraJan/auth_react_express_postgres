@@ -10,7 +10,7 @@ function Profile() {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const data = await request(`${process.env.REACT_APP_HOST}/api/user`, 'GET', null, { Authorization: `Bearer ${auth.token}` })
+        const data = await request(`${process.env.REACT_APP_HOST}/api/user`, 'GET' )
         setUser(data)
       } catch (error) {}
     }
