@@ -1,8 +1,11 @@
 PORT=
 
+
+DATABASE_URL=postgres://<username>:<password>@localhost:5432/<DBName>
+
 DB_USER=
 DB_PASSWORD=
 DB_NAME=
-DB_HOST=
+DB_HOST=127.0.0.1
 
 JWT_SECRET=
