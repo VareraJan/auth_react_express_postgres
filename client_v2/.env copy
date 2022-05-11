@@ -1,1 +1,2 @@
-REACT_APP_HOST=<back url>
+REACT_APP_HOST=<url server>
+REACT_APP_STORAGE_NAME=
